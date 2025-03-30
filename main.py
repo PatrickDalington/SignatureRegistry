@@ -12,8 +12,8 @@ import redis
 import json
 
 # ========== Configuration ==========
-DATABASE_URL = DATABASE_URL = os.getenv("DATABASE_URL")
-
+#DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:8100251810@localhost:5432/petition_db")
+DATABASE_URL = os.getenv("DATABASE_URL")
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 REDIS_DB = int(os.getenv("REDIS_DB", 0))
