@@ -6,14 +6,16 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime
+from urllib.parse import urlparse
 from typing import List
 import os
 import redis
 import json
 
 # ========== Configuration ==========
-#DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:8100251810@localhost:5432/petition_db")
+#DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:81002@localhost:5432/petition_db")
 DATABASE_URL = os.getenv("DATABASE_URL")
+REDIS_URL = os.getenv("REDIS_URL")
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 REDIS_DB = int(os.getenv("REDIS_DB", 0))
@@ -21,9 +23,13 @@ REDIS_DB = int(os.getenv("REDIS_DB", 0))
 # ========== Redis Connection ==========
 def get_redis_client():
     try:
-        client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
-        client.ping()
-        return client
+        parsed = urlparse(REDIS_URL)
+        return redis.Redis(
+            host=parsed.hostname,
+            port=parsed.port,
+            password=parsed.password,
+            ssl=parsed.scheme == "rediss"
+        )
     except redis.ConnectionError:
         raise RuntimeError("Unable to connect to Redis")
 
