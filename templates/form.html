@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign the Petition</title>
+
+  <!-- 🎉 Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- 🔥 Lottie Animation -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f9f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0 20px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    input[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    #counter {
+      font-weight: bold;
+      color: #007bff;
+      font-size: 18px;
+    }
+
+    h3 {
+      margin-top: 30px;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #ff4d4f;
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1000;
+      top: 20px;
+      right: 20px;
+      font-size: 17px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: visibility 0s, opacity 0.5s linear;
+    }
+
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .toast.success {
+      background-color: #28a745;
+    }
+
+    /* Confirmation Dialog */
+    .confirmation-dialog {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .dialog-content {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 320px;
+      animation: slideUp 0.4s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .dialog-content h2 {
+      margin-top: 10px;
+      color: #28a745;
+    }
+
+    .dialog-content button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .dialog-content button:hover {
+      background-color: #218838;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 500px) {
+      form { padding: 20px; }
+      h1 { font-size: 22px; }
+      input, input[type="submit"] { font-size: 14px; }
+      #counter { font-size: 16px; }
+      .toast { font-size: 15px; right: 10px; top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Global Climate Action Petition</h1>
+
+  <form id="petitionForm">
+    <label>Name:</label>
+    <input type="text" name="name" required><br />
+    <label>Email:</label>
+    <input type="email" name="email" required><br />
+    <label>Location:</label>
+    <input type="text" name="location"><br />
+    <input type="submit" value="Sign Petition" />
+  </form>
+
+  <h3>Total Signatures: <span id="counter">Loading...</span></h3>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Confirmation Dialog -->
+  <div id="confirmationDialog" class="confirmation-dialog">
+    <div class="dialog-content">
+      <!-- Lottie animation -->
+      <img
+      src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDVrM2VxaHFjcTQ3dmZ6MzFzMDFxamI1dHBuajkxbnYwM2N3N25pNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/BPJmthQ3YRwD6QqcVD/giphy.gif"
+      alt="Thank You"
+      style="width: 200px; height: 200px; object-fit: contain; margin-bottom: 10px;"
+    >
+      <h2>Thank You! ✅</h2>
+      <p>Your signature has been recorded.</p>
+      <button id="closeDialog">Close</button>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    const toast = document.getElementById("toast");
+    const counterEl = document.getElementById("counter");
+    const dialog = document.getElementById("confirmationDialog");
+    const closeDialogBtn = document.getElementById("closeDialog");
+
+    const socket = new WebSocket(`ws://${location.host}/ws`);
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.count !== undefined) {
+        counterEl.innerText = data.count;
+      }
+    };
+
+    fetch("/count")
+      .then(res => res.json())
+      .then(data => {
+        counterEl.innerText = data.count;
+      });
+
+    document.getElementById("petitionForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      const response = await fetch("/sign", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      toast.textContent = data.success || data.error || "Unknown response.";
+      toast.classList.remove("success");
+      toast.classList.add("show");
+
+      if (data.success) {
+        toast.classList.add("success");
+        form.reset();
+
+        // Show dialog
+        dialog.style.display = "flex";
+
+        // 🎉 Launch confetti
+        confetti({
+          particleCount: 120,
+          spread: 90,
+          origin: { y: 0.6 },
+        });
+
+        // Auto close dialog
+        setTimeout(() => {
+          dialog.style.display = "none";
+        }, 4000);
+      }
+
+      setTimeout(() => {
+        toast.classList.remove("show", "success");
+      }, 4000);
+    });
+
+    closeDialogBtn.addEventListener("click", () => {
+      dialog.style.display = "none";
+    });
+  </script>
+</body>
+</html>

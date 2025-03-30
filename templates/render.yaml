@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: fastapi-petition
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: DATABASE_URL
+        value: your_postgres_url
+      - key: REDIS_URL
+        value: your_redis_url
