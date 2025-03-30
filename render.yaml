@@ -1,8 +1,7 @@
 services:
   - type: web
     name: fastapi-petition-app
-    env: python
-    plan: free
+    runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host=0.0.0.0 --port=$PORT
     envVars:
@@ -10,9 +9,5 @@ services:
         fromDatabase:
           name: petition-db
           property: connectionString
-      - key: REDIS_HOST
-        value: your-redis-host
-      - key: REDIS_PORT
-        value: "your-redis-port"
-      - key: REDIS_DB
-        value: "0"
+      - key: REDIS_URL
+        value: redis://default:AcQqAAIjcDE4MDgwMzU0YWEwMWI0Y2UzODM5OWZkMDgxMzQyYjM5YnAxMA@assured-terrapin-50218.upstash.io:6379  
